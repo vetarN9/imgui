@@ -260,6 +260,8 @@ static void ShowDemoWindowTables();
 static void ShowDemoWindowColumns();
 static void ShowDemoWindowMisc();
 
+#include <windows.h>
+
 // Demonstrate most Dear ImGui features (this is big function!)
 // You may execute this function to experiment with the UI and understand what it does.
 // You may then search for keywords in the code when you are interested by a specific feature.
@@ -367,6 +369,24 @@ void ImGui::ShowDemoWindow(bool* p_open)
     // Menu Bar
     if (ImGui::BeginMenuBar())
     {
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::MenuItem("BLocking Win32 dialog"))
+            {
+                char buf[256] = "";
+                OPENFILENAMEA fn = {};
+                fn.lStructSize = sizeof(fn);
+                fn.hwndOwner = NULL;
+                fn.lpstrFile = buf;
+                fn.nMaxFile = sizeof(buf);
+                fn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+                ImGui::GetIO().SetAppAcceptingEvents(false);
+                ::GetOpenFileNameA(&fn);
+                ImGui::GetIO().SetAppAcceptingEvents(true);
+            }
+            ImGui::EndMenuBar();
+        }
+
         if (ImGui::BeginMenu("Menu"))
         {
             IMGUI_DEMO_MARKER("Menu/File");
